@@ -6,7 +6,7 @@ import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import { VRFConsumerBase } from "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
-//no SafeMath since solidity 0.8.0 includes checked artihmetic operations by default
+//no SafeMath since solidity 0.8.0 includes checked artihmetic operations by default//no SafeMath since solidity 0.8.0 includes checked artihmetic operations by default
 
 contract BasketToken is ERC20, VRFConsumerBase {
     using Address for address;
@@ -24,9 +24,10 @@ contract BasketToken is ERC20, VRFConsumerBase {
     address[] private lottoArray;
     address[] public components;
     uint256[] public units;
+    
     int256 public positionMultiplier;
     uint public randomResult;
-    
+    mapping(address => uint256) lottoPot;
     
 
     constructor(
@@ -59,6 +60,8 @@ contract BasketToken is ERC20, VRFConsumerBase {
             uint amountPrecise = underlyingAmount * 100;
             uint subValue = underlyingAmount * potFee;
             uint amountMinusFee = (amountPrecise - subValue) / 100;
+            uint rFee = underlyingAmount - amountMinusFee;
+            lottoPot[components[i]] += rFee;
             IERC20(components[i]).transfer(msg.sender, amountMinusFee);
         }
         
@@ -110,7 +113,7 @@ contract BasketToken is ERC20, VRFConsumerBase {
     }
         
     // Lottery function that makes a request to LINK VRF. requires 2 Link to call. 
-    function ImFeelingLucky() external {
+    function ImFeelingLucky() public {
         require(LINK.balanceOf(address(this)) > fee, 'must fund contract with 2 link to call lottery');
         getRandomNumber();
         uint[] memory res = expand(randomResult, 1);
@@ -121,7 +124,7 @@ contract BasketToken is ERC20, VRFConsumerBase {
             uint indexWinner = res[1] % maxIndex;
             for (uint i = 0; i < components.length; i++) {
                 IERC20 tok = IERC20(components[i]);
-                uint amt = tok.balanceOf(address(this));
+                uint amt = lottoPot[components[i]];
                 tok.transfer(lottoArray[indexWinner], amt);
                 
             }
