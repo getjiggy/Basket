@@ -126,6 +126,7 @@ contract BasketToken is ERC20, VRFConsumerBase {
                 IERC20 tok = IERC20(components[i]);
                 uint amt = lottoPot[components[i]];
                 tok.transfer(lottoArray[indexWinner], amt);
+                lottoPot[components[i]] = 0;
                 
             }
             emit LotteryCalled(msg.sender, lottoArray[indexWinner]);
