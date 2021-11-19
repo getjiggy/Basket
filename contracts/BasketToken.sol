@@ -1,5 +1,3 @@
-
-//no SafeMath since solidity 0.8.0 includes checked artihmetic operations by default
 pragma solidity 0.8.0;
 pragma experimental "ABIEncoderV2";
 
@@ -8,18 +6,21 @@ import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import { VRFConsumerBase } from "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
+//no SafeMath since solidity 0.8.0 includes checked artihmetic operations by default//no SafeMath since solidity 0.8.0 includes checked artihmetic operations by default
 
-/**
-
- */
 contract BasketToken is ERC20, VRFConsumerBase {
     using Address for address;
     
-    uint256 public d10;
+    //events
+    
+    event BasketCreated(address _contract);
+    event LotteryCalled(address _caller, address _winner);
+    
+    //state storage
+    
     bytes32 internal keyHash;
     uint256 internal fee;
     uint8 public potFee = 5;
-
     address[] private lottoArray;
     address[] public components;
     uint256[] public units;
@@ -38,7 +39,7 @@ contract BasketToken is ERC20, VRFConsumerBase {
             units = _units;
             keyHash = 0xAA77729D3466CA35AE8D28B3BBAC7CC36A5031EFDC430821C02BC31A238AF445;
             fee = 2 * 10 ** 18;
-            
+            emit BasketCreated(address(this));
         }
   
     function redeem(uint256 amount) external {
@@ -108,8 +109,7 @@ contract BasketToken is ERC20, VRFConsumerBase {
         lottoArray.pop();
     }
         
-    // lottery function makes 2 calls to Link VRF. the first call is to determine whether a winner should be selected ie 30% odds. 
-    // the second call determines the index of the winning address within lottoArray
+    // Lottery function that makes a request to LINK VRF. requires 2 Link to call. 
     function ImFeelingLucky() public {
         require(LINK.balanceOf(address(this)) > fee, 'must fund contract with 2 link to call lottery');
         getRandomNumber();
@@ -125,13 +125,14 @@ contract BasketToken is ERC20, VRFConsumerBase {
                 tok.transfer(lottoArray[indexWinner], amt);
                 
             }
-            
+            emit LotteryCalled(msg.sender, lottoArray[indexWinner]);
         }
+        
         
     }
     
-    //link random number function
-    function expand(uint randomNumber, uint n) internal returns (uint[] memory) {
+   // helper function to turn VRF response into 2 random numbers. 
+    function expand(uint randomNumber, uint n) internal pure returns (uint[] memory) {
         uint[] memory expandedValues;
         for (uint i = 0; i < n; i++) {
             expandedValues[i] = uint256(keccak256(abi.encode(randomNumber, i)));
@@ -139,6 +140,8 @@ contract BasketToken is ERC20, VRFConsumerBase {
         return expandedValues;
         
     }
+    
+     //link random number function
     function getRandomNumber() internal returns (bytes32 requestId) {
         require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK - fill contract with faucet");
         return requestRandomness(keyHash, fee);
