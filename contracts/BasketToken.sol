@@ -6,7 +6,7 @@ import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import { VRFConsumerBase } from "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
-//no SafeMath since solidity 0.8.0 includes checked artihmetic operations by default//no SafeMath since solidity 0.8.0 includes checked artihmetic operations by default
+//no SafeMath since solidity 0.8.0 includes checked artihmetic operations by default
 
 contract BasketToken is ERC20, VRFConsumerBase {
     using Address for address;
