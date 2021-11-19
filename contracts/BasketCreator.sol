@@ -4,7 +4,6 @@ pragma experimental "ABIEncoderV2";
 // simple contract for creating Baskets. can be called by anyone
 
 import { BasketToken } from "./BasketToken.sol";
-import { IBasketToken } from './interfaces/IBasketToken.sol';
 import { AddressArrayUtils } from './lib/AddressArrayUtils.sol';
 
 
