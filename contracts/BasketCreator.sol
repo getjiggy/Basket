@@ -13,7 +13,7 @@ contract BasketCreator {
     event basketCreated(address indexed basketToken, string name, string symbol);
     
     // state variables
-    
+    address LINK = 0x514910771AF9Ca656af840dff83E8264EcF986CA;
     constructor() public {
         
     }
@@ -33,6 +33,8 @@ contract BasketCreator {
 
         for (uint256 i = 0; i < _components.length; i++) {
             require(_components[i] != address(0), "Component must not be null address");
+            // if a basket were to contain link anyone could drain the link portion of the portfolio by repeatedly calling the lottoery function
+            require(_components[i] != address(LINK), "Component can not be Link token, Link is used to secure the lottery");
             require(_units[i] > 0, "Units must be greater than 0");
         }
 
