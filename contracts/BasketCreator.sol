@@ -33,7 +33,7 @@ contract BasketCreator {
 
         for (uint256 i = 0; i < _components.length; i++) {
             require(_components[i] != address(0), "Component must not be null address");
-            // if a basket were to contain link anyone could drain the link portion of the portfolio by repeatedly calling the lottoery function
+            // if a basket were to contain link anyone could drain the link portion of the portfolio by repeatedly calling the lottery function
             require(_components[i] != address(LINK), "Component can not be Link token, Link is used to secure the lottery");
             require(_units[i] > 0, "Units must be greater than 0");
         }
