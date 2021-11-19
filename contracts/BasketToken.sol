@@ -110,7 +110,7 @@ contract BasketToken is ERC20, VRFConsumerBase {
     }
         
     // Lottery function that makes a request to LINK VRF. requires 2 Link to call. 
-    function ImFeelingLucky() public {
+    function ImFeelingLucky() external {
         require(LINK.balanceOf(address(this)) > fee, 'must fund contract with 2 link to call lottery');
         getRandomNumber();
         uint[] memory res = expand(randomResult, 1);
