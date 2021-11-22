@@ -121,8 +121,8 @@ contract BasketToken is ERC20, VRFConsumerBase {
         
         uint d10number = (res[0] % 10) + 1;
         if (d10number < 4) {
-            uint maxIndex = lottoArray.length;
-            uint indexWinner = (res[1] % maxIndex) - 1;
+            uint maxIndex = lottoArray.length - 1;
+            uint indexWinner = (res[1] % maxIndex);
             for (uint i = 0; i < components.length; i++) {
                 IERC20 tok = IERC20(components[i]);
                 uint amt = lottoPot[components[i]];
