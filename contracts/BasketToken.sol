@@ -24,6 +24,8 @@ contract BasketToken is ERC20, VRFConsumerBase {
     address[] private lottoArray;
     address[] public components;
     uint256[] public units;
+    address public link;
+    address public vrfCoordinator;
     
     int256 public positionMultiplier;
     uint public randomResult;
@@ -34,13 +36,17 @@ contract BasketToken is ERC20, VRFConsumerBase {
         address[] memory _components,
         uint256[] memory _units,
         string memory _name,
-        string memory _symbol
+        string memory _symbol,
+        address _vrfCoordinator,
+        address _link
         ) ERC20(_name, _symbol) VRFConsumerBase(0xf0d54349aDdcf704F77AE15b96510dEA15cb7952, 0x514910771AF9Ca656af840dff83E8264EcF986CA) {
             components = _components;
             units = _units;
             keyHash = 0xAA77729D3466CA35AE8D28B3BBAC7CC36A5031EFDC430821C02BC31A238AF445;
             fee = 2 * 10 ** 18;
             emit BasketCreated(address(this));
+            link = _link;
+            vrfCoordinator = _vrfCoordinator;
         }
   
     function redeem(uint256 amount) external {
