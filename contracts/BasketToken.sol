@@ -122,6 +122,7 @@ contract BasketToken is ERC20, VRFConsumerBase {
     function ImFeelingLucky() public {
         require(LINK.balanceOf(address(this)) > fee, 'must fund contract with 2 link to call lottery');
         require(lottoArray.length > 0, 'Cannot call lottery if there are no current holders');
+        require(lottoPot[compenent[0]] > 0, 'Cannot call with empty Pot');
         getRandomNumber();
         uint[] memory res = expand(randomResult, 1);
         
