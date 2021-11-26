@@ -144,13 +144,13 @@ contract BasketToken is ERC20, VRFConsumerBase {
     }
     
    // helper function to turn VRF response into 2 random numbers. 
-    function expand(uint randomNumber, uint n) internal pure returns (uint[] memory) {
-        uint[] memory expandedValues;
+   function expand(uint randomNumber, uint n) internal pure returns (uint256[] memory expandedValues) {
+        expandedValues = new uint256[](n);
         for (uint i = 0; i < n; i++) {
             expandedValues[i] = uint256(keccak256(abi.encode(randomNumber, i)));
         }
         return expandedValues;
-        
+
     }
     
      //link random number function
