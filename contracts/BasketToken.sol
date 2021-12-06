@@ -5,8 +5,7 @@ import { Address } from "OpenZeppelin/openzeppelin-contracts@4.3.2/contracts/uti
 import { ERC20 } from "OpenZeppelin/openzeppelin-contracts@4.3.2/contracts/token/ERC20/ERC20.sol";
 //import { VRFConsumerBase } from "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 import { IERC20 } from "OpenZeppelin/openzeppelin-contracts@4.3.2/contracts/token/ERC20/IERC20.sol";
-import "./VRFConsumerBase.sol";
-
+import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 
 //
 //import { Address } from "@openzeppelin/contracts/utils/Address.sol";
